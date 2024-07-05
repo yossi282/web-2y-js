@@ -1,3 +1,4 @@
+/* Dalam file public/css/styles.css */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -14,16 +15,6 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-header .logo {
-    display: flex;
-    align-items: center;
-}
-
-header .logo img {
-    height: 40px;
-    margin-right: 15px;
 }
 
 header nav ul {
@@ -43,7 +34,7 @@ header nav ul li a {
 }
 
 main {
-    padding-top: 60px; /* Adjust this value based on your header height */
+    padding-top: 65px; /* Sesuaikan dengan tinggi header Anda */
 }
 
 .calculator {
