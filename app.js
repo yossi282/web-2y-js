@@ -11,7 +11,7 @@ let latestSensorData = 'data';
 
 // Connect to the MQTT broker
 //const mqttClient = mqtt.connect('mqtt://127.0.0.1:1883');
-const mqttClient = mqtt.connect('wss://broker.emqx.io:8084/mqtt');
+const mqttClient = mqtt.connect('wss://test.mosquitto.org:8081');
 
 mqttClient.on('connect', () => {
   console.log('Connected to MQTT broker');
