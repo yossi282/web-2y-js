@@ -5,6 +5,8 @@ const path = require('path');
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { Pool } = require('pg'); 
+require('dotenv').config();
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -18,7 +20,15 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
   if (err) throw err
-  console.log("database connected")
+  console.log("MySQL database connected")
+});
+
+// Koneksi PostgreSQL
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 app.post('/api/login', (req, res) => {
@@ -169,6 +179,7 @@ app.get("/mqtt", function (req, res) {
     res.sendFile(path.join(__dirname, "public/mqtt.html"));
 });
 
+const PORT = process.env.PORT || 2828;
 app.listen("2828", function () {
-    console.log("Your website is online.");
+    console.log(`Your website is online on port ${PORT}.`);
 });
