@@ -15,44 +15,84 @@
       background-color: #DDE6ED;
     }
 
-header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: rgb(22, 22, 66);
-    color: white;
-    padding: 10px 20px;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: rgb(22, 22, 66);
+      color: white;
+      padding: 10px 20px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-header nav ul {
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
-}
+    header nav ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
 
-header nav ul li {
-    margin: 0 15px;
-}
+    header nav ul li {
+      margin: 0 15px;
+    }
 
-header nav ul li a {
-    color: white;
-    text-decoration: none;
-}
+    header nav ul li a {
+      color: white;
+      text-decoration: none;
+    }
 
-main {
-    padding-top: 65px; /* Sesuaikan dengan tinggi header Anda */
-}
+    main {
+      padding-top: 65px; /* Sesuaikan dengan tinggi header Anda */
+    }
+
     #on_button, #off_button {
       font-size: 20px; /* Ukuran teks */
       padding: 15px 30px; /* Padding atas-bawah dan kiri-kanan */
       width: 200px; /* Lebar tombol */
       height: 50px; /* Tinggi tombol */
       justify-content: center;
+    }
+
+    .indicator-container {
+      position: relative;
+      width: 100px;
+      height: 250px;
+      margin-top: 20px;
+    }
+
+    .thermometer, .waterdrop {
+      background-image: url('/images/thermometer-image.png');
+      background-size: cover;
+      height: 100%;
+    }
+
+    .thermometer {
+      background-image: url('/images/thermometer-image.png');
+    }
+
+    .waterdrop {
+      background-image: url('/images/water-drop-image.png');
+    }
+    .indicator {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: red;
+    }
+
+    #thermometer-indicator {
+      background-color: red;
+    }
+
+    #waterdrop-indicator {
+      background-color: blue;
+    }
+
+    .sensor-data {
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -70,11 +110,27 @@ main {
   </header>
   <main>
     <h1>MQTT Publish Interface JavaScript</h1>
+    <h2>LED Interface</h2>
     <button id="on_button">On</button>
     <button id="off_button">Off</button>
     <h2>Latest Sensor Data</h2>
     <div id="sensorData">No data received</div>
     <meter id="disk_c" value="0" min="0" max="4096">2 out of 10</meter><br>
+    <h2>DHT Interface</h2>
+    <div class="sensor-data">
+      <div class="indicator-container">
+        <div class="thermometer">
+          <div id="thermometer-indicator" class="indicator"></div>
+        </div>
+      </div>
+      <div class="indicator-container">
+        <div class="waterdrop">
+          <div id="waterdrop-indicator" class="indicator"></div>
+        </div>
+      </div>
+      <div id="temperature-display"></div>
+      <div id="humidity-display"></div>
+    </div>
   </main>
   <script>
     document.getElementById('on_button').addEventListener('click', () => {
@@ -121,20 +177,57 @@ main {
       fetch('/sensor-data')
         .then(response => response.json())
         .then(data => {
-          document.getElementById('sensorData').innerText = data.data;
+            document.getElementById('sensorData').innerText = "Potensiometer: " + data.data;
         })
         .catch(error => {
           console.error('Error:', error);
         });
     }
 
+    function fetchDHTData() {
+      fetch('/sensor-data2')
+        .then(response => response.json())
+        .then(data => {
+            updateThermometer(data.temperature);
+            updateWaterdrop(data.humidity);
+            document.getElementById('temperature-display').innerText = "Temperature: " + data.temperature + "°C";
+            document.getElementById('humidity-display').innerText = "Humidity: " + data.humidity + "%";
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    };
+
+    function updateThermometer(temperature) {
+      const indicator = document.getElementById('thermometer-indicator');
+      const height = (temperature / 50) * 100; // Assume max temperature is 50°C
+      indicator.style.height = `${height}%`;
+
+      if (temperature >= 30) {
+        indicator.style.backgroundColor = 'red';
+      } else if (temperature <= 10) {
+        indicator.style.backgroundColor = 'blue';
+      } else {
+        indicator.style.backgroundColor = 'orange';
+      }
+    }
+
+    function updateWaterdrop(humidity) {
+      const indicator = document.getElementById('waterdrop-indicator');
+      const height = (humidity / 100) * 100; // Max humidity is 100%
+      indicator.style.height = `${height}%`;
+      indicator.style.backgroundColor = 'blue';
+    }
+
     var meterElement = document.getElementById('disk_c');
 
     // Fetch sensor data every 1 second
     setInterval(fetchSensorData, 1000);
+    setInterval(fetchDHTData, 1000);
 
     // Fetch sensor data initially
     fetchSensorData();
+    fetchDHTData();
   </script>
 </body>
 </html>
