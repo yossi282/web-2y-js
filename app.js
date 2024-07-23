@@ -12,16 +12,20 @@ app.use(express.static("public"));
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: "localhost",
-  database: "auth",
-  user: "root",
-  password: ""
+  host: process.env.MYSQL_HOST || "localhost",
+  database: process.env.MYSQL_DATABASE || "auth",
+  user: process.env.MYSQL_USER || "root",
+  password: process.env.MYSQL_PASSWORD || ""
 });
 
 db.connect((err) => {
-  if (err) throw err
-  console.log("MySQL database connected")
+  if (err) {
+    console.error("Database connection error:", err);
+    throw err;
+  }
+  console.log("MySQL database connected");
 });
+
 
 // Koneksi PostgreSQL
 const pool = new Pool({
