@@ -2,12 +2,75 @@ const express = require("express");
 const mqtt = require('mqtt');
 const app = express();
 const path = require('path');
+const mysql = require("mysql");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 app.use(express.static("public"));
 app.use(express.json());
 
+const db = mysql.createConnection({
+  host: "localhost",
+  database: "auth",
+  user: "root",
+  password: ""
+});
+
+db.connect((err) => {
+  if (err) throw err
+  console.log("database connected")
+});
+
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
+    if (err) {
+      console.error('Database query error:', err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+    if (results.length > 0) {
+      const user = results[0];
+      console.log('User found:', user); // Log user data
+
+      bcrypt.compare(password, user.password, (err, isMatch) => {
+        if (err) {
+          console.error('Bcrypt compare error:', err);
+          return res.status(500).json({ message: 'Internal server error' });
+        }
+        if (isMatch) {
+          const token = jwt.sign({ id: user.id }, 'secretkey', { expiresIn: '1h' });
+          res.json({ message: 'Login successful', token });
+        } else {
+          console.log('Password mismatch'); // Log password mismatch
+          res.status(401).json({ message: 'Invalid credentials' });
+        }
+      });
+    } else {
+      console.log('User not found'); // Log user not found
+      res.status(401).json({ message: 'Invalid credentials' });
+    }
+  });
+});
+
+app.post('/api/signup', (req, res) => {
+  const { email, password } = req.body;
+  bcrypt.hash(password, 10, (err, hash) => {
+    if (err) throw err;
+    db.query('INSERT INTO users (email, password) VALUES (?, ?)', [email, hash], (err, results) => {
+      if (err) throw err;
+      res.json({ message: 'User registered successfully' });
+    });
+  });
+});
+
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "public/index.html"));
+});
+
 // Variable to store the latest sensor data
 let latestSensorData = 'data';
+let latestTemperatureData = 'data';
+let latestHumidityData = 'data';
 
 // Connect to the MQTT broker
 //const mqttClient = mqtt.connect('mqtt://127.0.0.1:1883');
@@ -16,25 +79,46 @@ const mqttClient = mqtt.connect('mqtt://broker.emqx.io:1883');
 mqttClient.on('connect', () => {
   console.log('Connected to MQTT broker');
   
-  // Subscribe to the "sensor" topic
-  mqttClient.subscribe('potensiometer_husni', (err) => {
+  mqttClient.subscribe('temperature_yossi', (err) => {
     if (err) {
-      console.error('Failed to subscribe to topic "sensor":', err);
+      console.error('Failed to subscribe to topic "temperature_yossi":', err);
     } else {
-      console.log('Subscribed to topic "sensor"');
+      console.log('Subscribed to topic "temperature_yossi"');
+    }
+  });
+
+  mqttClient.subscribe('humidity_yossi', (err) => {
+    if (err) {
+      console.error('Failed to subscribe to topic "humidity_yossi":', err);
+    } else {
+      console.log('Subscribed to topic "humidity_yossi"');
+    }
+  });
+
+  // Subscribe to the "sensor" topic
+  mqttClient.subscribe('potensiometer_yossi', (err) => {
+    if (err) {
+      console.error('Failed to subscribe to topic "potensiometer_yossi":', err);
+    } else {
+      console.log('Subscribed to topic "potensiometer_yossi"');
     }
   });
 });
 
-// Handle incoming messages from the "sensor" topic
+// Handle incoming messages from the temperature and humidity topics
 mqttClient.on('message', (topic, message) => {
-    if (topic === 'potensiometer_husni') {
-      console.log(`Received message from ${topic}: ${message.toString()}`);
-      // Store the received data
-      latestSensorData = message.toString();
-      console.log(latestSensorData);
-    }
-  });
+  if (topic === 'temperature_yossi') {
+    console.log(`Received message from ${topic}: ${message.toString()}`);
+    latestTemperatureData = message.toString();
+  } else if (topic === 'humidity_yossi') {
+    console.log(`Received message from ${topic}: ${message.toString()}`);
+    latestHumidityData = message.toString();
+  } else if (topic === 'potensiometer_yossi') {
+    console.log(`Received message from ${topic}: ${message.toString()}`);
+    latestSensorData = message.toString();
+    console.log(latestSensorData);
+  }
+});
   
   mqttClient.on('error', (err) => {
     console.error('MQTT connection error:', err);
@@ -59,6 +143,10 @@ app.post('/publish', (req, res) => {
   // Route to get the latest sensor data
 app.get('/sensor-data', (req, res) => {
     res.json({ data: latestSensorData });
+  });
+
+  app.get('/sensor-data2', (req, res) => {
+    res.json({ temperature: latestTemperatureData, humidity: latestHumidityData });
   });
 
 app.get("/", function (req, res) {
