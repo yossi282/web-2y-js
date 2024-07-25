@@ -38,7 +38,8 @@ const pool = new Pool({
 
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
-  db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
+  console.log('Login attempt:', email); // Log login attempt
+  connection.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
     if (err) {
       console.error('Database query error:', err);
       return res.status(500).json({ message: 'Internal server error' });
@@ -67,11 +68,12 @@ app.post('/api/login', (req, res) => {
   });
 });
 
+
 app.post('/api/signup', (req, res) => {
   const { email, password } = req.body;
   bcrypt.hash(password, 10, (err, hash) => {
     if (err) throw err;
-    db.query('INSERT INTO users (email, password) VALUES (?, ?)', [email, hash], (err, results) => {
+    connection.query('INSERT INTO users (email, password) VALUES (?, ?)', [email, hash], (err, results) => {
       if (err) throw err;
       res.json({ message: 'User registered successfully' });
     });
