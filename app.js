@@ -11,20 +11,21 @@ require('dotenv').config();
 app.use(express.static("public"));
 app.use(express.json());
 
-const db = mysql.createConnection({
-  host: process.env.MYSQL_HOST || "localhost",
-  database: process.env.MYSQL_DATABASE || "auth",
-  user: process.env.MYSQL_USER || "root",
-  password: process.env.MYSQL_PASSWORD || ""
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS
 });
 
-db.connect((err) => {
+connection.connect((err) => {
   if (err) {
-    console.error("Database connection error:", err);
-    throw err;
+    console.error('Error connecting to MySQL:', err);
+    return;
   }
-  console.log("MySQL database connected");
+  console.log('Connected to MySQL Database!');
 });
+
 
 
 // Koneksi PostgreSQL
