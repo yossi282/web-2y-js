@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
-  password: process.env.DB_PASS
+  password: process.env.DB_PASS === 'nopassword' ? '' : process.env.DB_PASS
 });
 
 connection.connect((err) => {
