@@ -3,67 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>Home</title>
     <style>
         body {
             display: flex;
-            justify-content: left;
-            align-items: left;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #DDE6ED;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(to bottom,
+                #1c3b58,  /* biru gelap */
+                #234e72,  /* biru sedang */
+                #2b628d,  /* biru agak terang */
+                #3b729e,  /* biru lebih terang */
+                #4d82af    /* biru pastel sangat terang */
+            ); 
+            color: white;
         }
 
-header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: rgb(22, 22, 66);
-    color: white;
-    padding: 10px 20px;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #1c3b58;
+            color: white;
+            padding: 15px 35px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1em;
+        }
 
-header nav ul {
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
-}
+        header .logo-container {
+            display: flex;
+            align-items: center;
+        }
 
-header nav ul li {
-    margin: 0 15px;
-}
+        header .nav-links {
+            margin-left: auto; /* Menggeser elemen nav ke kanan */
+        }
 
-header nav ul li a {
-    color: white;
-    text-decoration: none;
-}
+        header nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
 
-main {
-    padding-top: 65px; /* Sesuaikan dengan tinggi header Anda */
-}
+        header nav ul li {
+            margin: 0 20px; /* Jarak antara elemen */
+            display: flex;
+            align-items: center;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo {
+            height: 35px;
+            margin-left: 15px;
+            transition: transform 0.3s ease, shadow 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1); /* Sedikit memperbesar saat hover */
+            border-radius: 50%; /* Membuat efek bulat */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Efek bayangan lebih dalam saat hover */
+        }
+
+        .upilogo {
+            display: block;
+            margin: 0 auto 30px; /* Center the logo and add space below it */
+            height: 80px; /* Adjusted the height of the logo */
+            transition: transform 0.3s ease, shadow 0.3s ease;
+        }
+
+        .upilogo:hover {
+            transform: scale(1.1); /* Sedikit memperbesar saat hover */
+            border-radius: 50%; /* Membuat efek bulat */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Efek bayangan lebih dalam saat hover */
+        }
+
+        main {
+            display: flex;
+            flex-direction: column; /* Susun item secara vertikal */
+            align-items: center;
+            padding: 20px;
+        }
+
+        .welcome-box {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2); /* Warna latar belakang semi-transparan */
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan untuk efek kedalaman */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            max-width: 90%; /* Lebar maksimum box */
+            width: auto; /* Sesuaikan lebar dengan teks */
+            margin-bottom: 20px; /* Jarak antara box */
+            text-align: center;
+        }
+
+        .welcome-box:hover {
+            transform: scale(1.05); /* Sedikit memperbesar saat hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Efek bayangan lebih dalam saat hover */
+        }
+
+        .welcome-box h1 {
+            font-size: 3em; /* Membesarkan font size */
+            margin: 0;
+        }
+
+        .welcome-box h3 {
+            font-size: 1.2em;
+            margin: 0;
+            font-weight: normal; /* Untuk gaya yang lebih halus */
+        }
+
+        .login-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2); /* Warna latar belakang semi-transparan */
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan untuk efek kedalaman */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            max-width: 90%; /* Lebar maksimum box */
+            width: auto; /* Sesuaikan lebar dengan teks */
+            text-align: center;
+        }
+
+        .login-box:hover {
+            transform: scale(1.05); /* Sedikit memperbesar saat hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Efek bayangan lebih dalam saat hover */
+        }
+
+        .login-box img.logo {
+            margin-bottom: 20px; /* Jarak antara logo dan box login/signup */
+        }
+
+        .login-box .buttons {
+            display: flex;
+            justify-content: space-between; /* Menyusun tombol secara horizontal */
+            gap: 20px; /* Jarak antara tombol */
+            width: 100%;
+        }
+
+        .login-box a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.3); /* Warna latar belakang tombol */
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-box a:hover {
+            background-color: rgba(0, 0, 0, 0.5); /* Warna latar belakang tombol saat hover */
+        }
+
+        @media (max-width: 600px) {
+            .welcome-box,
+            .login-box {
+                width: 90%;
+                padding: 15px;
+            }
+
+            .welcome-box h1 {
+                font-size: 2em;
+            }
+
+            .welcome-box h3 {
+                font-size: 1em;
+            }
+
+            .login-box .buttons {
+                flex-direction: column; /* Susun tombol secara vertikal pada layar kecil */
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <nav>
-            <ul>
-                <li><a href="/about">About</a></li>
-                <li><a href="/">Home</a></li>
-                <li><a href="/kalkulator">Kalkulator</a></li>
-                <li><a href="/auth">Login/Signup</a></li>
-                <li><a href="/mqtt">MQTT</a></li>
-            </ul>
-        </nav>
+        <div class="logo-container">
+            <a href="/"><img src="images/logoupi.png" alt="Logo" class="logo"></a>
+        </div>
+        <div class="nav-links">
+            <nav>
+                <ul>
+                    <li><a href="/about1">About</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
     <main>
-        <h1>Welcome to the Homepage</h1>
+        <img src="images/logoupi.png" alt="Logo" class="upilogo">
+        <div class="welcome-box">
+            <h1>SELAMAT DATANG</h1>
+            <h3>Website ini digunakan untuk mengendalikan dan memantau sensor pada perangkat yang berada di atas kapal</h3>
+        </div>
+        <div class="login-box">
+            <img src="images/user.png" alt="Logo" class="logo">
+            <div class="buttons">
+                <a href="/login.html">Login</a>
+                <a href="/signup.html">Sign Up</a>
+            </div>
+        </div>
     </main>
-    <script src="js/main.js" ></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

@@ -5,27 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About</title>
     <style>
-        body {
-            display: flex;
-            justify-content: left;
-            align-items: left;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #DDE6ED;
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(to bottom,
+    #1c3b58,  /* biru gelap */
+        #234e72,  /* biru sedang */
+        #2b628d,  /* biru agak terang */
+        #3b729e,  /* biru lebih terang */
+        #4d82af    /* biru pastel sangat terang */
+    ); 
+    color: white;
 }
 
 header {
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: rgb(22, 22, 66);
+    background-color: #1c3b58;
     color: white;
-    padding: 10px 20px;
+    padding: 15px 35px;
     z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-size: 1em;
+}
+
+header nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 header nav ul {
@@ -37,6 +52,8 @@ header nav ul {
 
 header nav ul li {
     margin: 0 15px;
+    display: flex;
+    align-items: center;
 }
 
 header nav ul li a {
@@ -44,36 +61,192 @@ header nav ul li a {
     text-decoration: none;
 }
 
-main {
-    padding-top: 65px; /* Sesuaikan dengan tinggi header Anda */
+.logo {
+    height: 35px;
+    transition: transform 0.3s ease, shadow 0.3s ease;
 }
 
+.logo:hover {
+    transform: scale(1.1); /* Sedikit memperbesar saat hover */
+    border-radius: 50%; /* Membuat efek bulat */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Efek bayangan lebih dalam saat hover */
+}
+
+.userlogo {
+    height: 35px;
+    margin-right: 20px;
+    transition: transform 0.3s ease, shadow 0.3s ease;
+}
+
+.userlogo:hover {
+    transform: scale(1.1); /* Sedikit memperbesar saat hover */
+    border-radius: 50%; /* Membuat efek bulat */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Efek bayangan lebih dalam saat hover */
+}
+
+.user-logo {
+    margin-left: auto; /* Memindahkan userlogo ke kanan */
+    order: 2; /* Menempatkan userlogo sebagai item terakhir */
+    padding-right: 20px; 
+    position: relative; /* Membutuhkan posisi relatif untuk dropdown */
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Jarak antara elemen */
+}
+
+.dropdown {
+    display: none; /* Sembunyikan dropdown secara default */
+    position: absolute; /* Posisi absolut untuk dropdown */
+    top: 100%; /* Posisi dropdown di bawah userlogo */
+    right: 20px;
+    background-color: #234e72;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 150px;
+    z-index: 1000;
+
+}
+
+.dropdown a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+}
+
+.dropdown a:hover {
+    background-color: #1c3b58;
+}
+
+.user-logo:hover .dropdown {
+    display: block; /* Tampilkan dropdown saat hover */
+}
+
+main {
+    display: flex;
+    flex-direction: column; /* Susun item secara vertikal */
+    align-items: center;
+    padding: 20px;
+}
+
+.info-box-container {
+    display: flex;
+    gap: 20px; /* Jarak antara kotak */
+    flex-wrap: wrap; /* Membungkus kotak ke baris berikutnya jika terlalu sempit */
+    justify-content: center; /* Memusatkan kotak di baris */
+    width: 100%;
+    max-width: 1200px; /* Lebar maksimum kontainer */
+}
+
+.info-box {
+    display: flex;
+    flex-direction: column; /* Susun gambar dan kotak secara vertikal */
+    align-items: center;
+    gap: 10px; /* Jarak antara gambar dan kotak */
+}
+
+.yossi-box {
+    background-color: rgba(255, 255, 255, 0.2); /* Warna latar belakang semi-transparan */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan untuk efek kedalaman */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 300px; /* Lebar kotak */
+    text-align: center;
+}
+
+.yossi-box:hover{
+    transform: scale(1.05); /* Sedikit memperbesar saat hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Efek bayangan lebih dalam saat hover */
+}
+
+.yossi-box h2 {
+    font-size: 2em; /* Ukuran font untuk judul */
+    margin: 0;
+}
+
+.yossi-box p {
+    font-size: 1em; /* Ukuran font untuk teks */
+    margin: 0;
+    font-weight: normal; /* Untuk gaya yang lebih halus */
+}
+
+.yossi-pic {
+    width: 200px; /* Lebar gambar sesuai dengan kotak */
+    height: 200px; /* Tinggi gambar sesuai dengan kotak */
+    border-radius: 10px; /* Sudut gambar melengkung */
+    object-fit: cover; /* Memastikan gambar menutupi area dengan proporsi yang benar */
+}
+
+h1 {
+    font-size: 3em;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .info-box-container {
+        flex-direction: column; /* Susun kotak secara vertikal pada layar kecil */
+        gap: 10px; /* Jarak antar kotak pada layar kecil */
+    }
+
+    .yossi-box {
+        width: 100%; /* Lebar penuh pada layar kecil */
+    }
+
+    .yossi-pic {
+        width: 90%; /* Lebar gambar pada layar kecil */
+        height: auto; /* Tinggi gambar otomatis pada layar kecil */
+    }
+}
     </style>
+            <script>
+                function confirmSignOut(event) {
+                    event.preventDefault(); // Mencegah tautan untuk diikuti secara langsung
+                    var confirmation = confirm("Apakah anda yakin ingin keluar?");
+                    if (confirmation) {
+                        window.location.href = "/"; // Arahkan ke halaman /
+                    }
+                }
+            </script>
 </head>
 <body>
     <header>
         <nav>
-            <ul>
-                <li><a href="/about">About</a></li>
-                <li><a href="/">Home</a></li>
-                <li><a href="/kalkulator">Kalkulator</a></li>
-                <li><a href="/auth">Login/Signup</a></li>
-                <li><a href="/mqtt">MQTT</a></li>
-            </ul>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="/home"><img src="images/logoupi.png" alt="Logo" class="logo"></a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/mqtt">Monitor</a></li>
+                </ul>
+            </div>
+            <div class="user-logo">
+                <img src="images/user.png" alt="User Logo" class="userlogo"></a>
+                <div class="dropdown">
+                    <a href="/profil">Profil</a>
+                    <a href="/" onclick="confirmSignOut(event)">Sign Out</a>
+                </div>
+            </div>
         </nav>
     </header>
     <main>
-        <h1>About Us</h1>
-        <div class="creator">
-            <h2>Yossi Febriyana</h2>
-            <p>Yossi merupakan seorang mahasiswa UPI pada Program Studi Pendidikan Teknik Elektro dengan konsentrasi Elektro Telekomunikasi. Yossi biasa dipanggil Oci.</p>
-        </div>
-        <div class="creator">
-            <h2>Yuri Nur Azizah</h2>
-            <p>Yuri merupakan seorang mahasiswa UPI pada Program Studi Pendidikan Teknik Elektro dengan konsentrasi Elektro Telekomunikasi. Yuri biasa dipanggil Yuri.</p>
+        <h1>About Creator</h1>
+        <div class="info-box-container">
+            <div class="info-box">
+                <img src="images/yossi.jpeg" alt="Yossi Pic" class="yossi-pic">
+                <div class="yossi-box">
+                    <h2>Yossi Febriyana</h2>
+                    <h2>NIM 2108000</h2>
+                    <p>Yossi merupakan seorang mahasiswi Universitas Pendidikan Indonesia semester 7 pada Program Studi Pendidikan Teknik Elektro dengan konsentrasi Elektro Telekomunikasi.</p>
+                    <p>E-mail: yossifebriyana@upi.edu</p>
+                </div>
+            </div>
         </div>
     </main>
-    <script src="js/main.js" ></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
-

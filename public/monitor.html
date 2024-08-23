@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring & MQTT</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: top;
+            height: 100vh;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(to bottom,
+                #1c3b58,
+                #234e72,
+                #2b628d,
+                #3b729e,
+                #4d82af
+            );
+            color: white;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #1c3b58;
+            color: white;
+            padding: 15px 35px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1em;
+        }
+
+        header nav {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        header nav ul li {
+            margin: 0 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo {
+            height: 35px;
+            transition: transform 0.3s ease, shadow 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .userlogo {
+            height: 35px;
+            transition: transform 0.3s ease, shadow 0.3s ease;
+        }
+
+        .userlogo:hover {
+            transform: scale(1.1);
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .user-logo {
+            margin-left: auto;
+            order: 2;
+            padding-right: 20px;
+            margin-right: 20px;
+            position: relative;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #234e72;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .dropdown a:hover {
+            background-color: #1c3b58;
+        }
+
+        .user-logo:hover .dropdown {
+            display: block;
+        }
+
+        main {
+            margin-top: 100px; /* Meningkatkan margin-top untuk memberi ruang lebih di bawah header */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .container-wrapper {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center; /* Mengatur agar box-box di-center */
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .gps-container, .speed-container, .wp-container, .temp-container, .humid-container, .led-container, .potentiometer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 250px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gps-container:hover, .speed-container:hover, .wp-container:hover, .temp-container:hover, .humid-container:hover, .led-container:hover, .potentiometer-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .gps-container h2, .speed-container h2, .wp-container h2, .temp-container h2, .humid-container h2, .led-container h2, .potentiometer-container h2 {
+            font-size: 1.2em;
+            margin: 0;
+            transition: color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+        }
+
+        .gps-container h2:hover, .speed-container h2:hover, .wp-container h2:hover, .temp-container h2:hover, .humid-container h2:hover, .led-container h2:hover, .potentiometer-container h2:hover {
+            transform: scale(1.1);
+        }
+
+        .indicator-container {
+            position: relative;
+            width: 100px;
+            height: 250px;
+            margin-top: 20px;
+        }
+
+        .indicator {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+        }
+
+        .sensor-data {
+            margin-top: 0px;
+        }
+
+        #on_button, #off_button {
+            font-size: 20px; /* Ukuran teks */
+            padding: 15px 30px; /* Padding atas-bawah dan kiri-kanan */
+            width: 200px; /* Lebar tombol */
+            height: 50px; /* Tinggi tombol */
+            justify-content: center;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            .gps-container, .speed-container, .wp-container, .temp-container, .humid-container, .led-container, .potentiometer-container {
+                padding: 10px;
+                width: 90%;
+                max-width: 100%;
+            }
+
+            .gps-container h2, .speed-container h2, .wp-container h2, .temp-container h2, .humid-container h2, .led-container h2, .potentiometer-container h2 {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="/home"><img src="images/logoupi.png" alt="Logo" class="logo"></a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/monitor">Monitoring</a></li>
+                    <li><a href="/mqtt">MQTT</a></li>
+                </ul>
+            </div>
+            <div class="user-logo">
+                <img src="images/user.png" alt="User Logo" class="userlogo">
+                <div class="dropdown">
+                    <a href="/profil">Profil</a>
+                    <a href="/" onclick="confirmSignOut(event)">Sign Out</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <h1>Monitoring & MQTT</h1>
+        <div class="container-wrapper">
+            <div class="gps-container">
+                <div class="text-container">
+                    <h2 class="gps-title">GPS</h2>
+                    <div class="coordinates">
+                        <h3>Latitude: </h3>
+                        <h3>Longitude: </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="speed-container">
+                <div class="text-container">
+                    <h2 class="speed-title">SPEED</h2>
+                    <div class="sensor-data">
+                        <h3>Speed: </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="wp-container">
+                <div class="text-container">
+                    <h2 class="wp-title">WATER PRESSURE</h2>
+                    <div class="sensor-data">
+                        <h3>Pressure: </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="temp-container">
+                <div class="text-container">
+                    <h2 class="temp-title">TEMPERATURE</h2>
+                    <div class="sensor-data">
+                        <h3>Temperature: </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="humid-container">
+                <div class="text-container">
+                    <h2 class="humid-title">HUMIDITY</h2>
+                    <div class="sensor-data">
+                        <h3>Humidity: </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const onButton = document.getElementById('on_button');
+            const offButton = document.getElementById('off_button');
+
+            onButton.addEventListener('click', () => {
+                // Add code to send MQTT message to turn on the LED
+                console.log('LED turned ON');
+            });
+
+            offButton.addEventListener('click', () => {
+                // Add code to send MQTT message to turn off the LED
+                console.log('LED turned OFF');
+            });
+        });
+    </script>
+</body>
+</html>

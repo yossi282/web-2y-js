@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(to bottom,
+            #1c3b58,  /* biru gelap */
+                #234e72,  /* biru sedang */
+                #2b628d,  /* biru agak terang */
+                #3b729e,  /* biru lebih terang */
+                #4d82af    /* biru pastel sangat terang */
+            ); 
+            color: white;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #1c3b58;
+            color: white;
+            padding: 15px 35px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1em;
+        }
+
+        header nav {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        header nav ul li {
+            margin: 0 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo {
+            height: 35px;
+            transition: transform 0.3s ease, shadow 0.3s ease;
+        }
+
+        .login-logo {
+            height: 150px; /* Ukuran logo diperbesar */
+            transition: transform 0.3s ease, shadow 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .logo:hover, .login-logo:hover {
+            transform: scale(1.1); /* Sedikit memperbesar saat hover */
+            border-radius: 50%; /* Membuat efek bulat */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Efek bayangan lebih dalam saat hover */
+        }
+
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-container h2 {
+            font-size: 1.5em;
+            margin-bottom: 0px;
+            align-items: left;
+            transition: color 0.3s ease, transform 0.3s ease;
+            text-align: left; /* Meratakan teks ke kiri */
+        }
+
+        .login-container h2:hover {
+            transform: scale(1.1); /* Efek zoom saat hover */
+        }
+
+        .userlogo { /*logo di ujung kanan*/
+            height: 35px;
+            transition: transform 0.3s ease, shadow 0.3s ease;
+        }
+
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 10px;
+                width: 90%;
+            }
+
+            .login-container h2 {
+                font-size: 1em;
+                align-items: left;
+            }};
+
+        .userlogo:hover {
+            transform: scale(1.1); /* Sedikit memperbesar saat hover */
+            border-radius: 50%; /* Membuat efek bulat */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Efek bayangan lebih dalam saat hover */
+        }
+
+        .user-logo {
+    margin-left: auto; /* Memindahkan userlogo ke kanan */
+    order: 2; /* Menempatkan userlogo sebagai item terakhir */
+    padding-right: 20px;
+    margin-right: 20px;
+    position: relative; /* Membutuhkan posisi relatif untuk dropdown */
+}
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Jarak antara elemen */
+        }
+
+        .dropdown {
+            display: none; /* Sembunyikan dropdown secara default */
+            position: absolute; /* Posisi absolut untuk dropdown */
+            top: 100%; /* Posisi dropdown di bawah userlogo */
+            right: 0px; /* Posisi dropdown di ujung kanan userlogo */
+            background-color: #234e72;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .dropdown a:hover {
+            background-color: #1c3b58;
+        }
+
+        .user-logo:hover .dropdown {
+            display: block; /* Tampilkan dropdown saat hover */
+        }
+
+        main {
+            display: flex;
+            flex-direction: column; /* Susun item secara vertikal */
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Container for the text fields */
+        .text-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+    </style>
+            <script>
+                function confirmSignOut(event) {
+                    event.preventDefault(); // Mencegah tautan untuk diikuti secara langsung
+                    var confirmation = confirm("Apakah anda yakin ingin keluar?");
+                    if (confirmation) {
+                        window.location.href = "/"; // Arahkan ke halaman /
+                    }
+                }
+            </script>
+</head>
+<body>
+    <header>
+        
+        <nav>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="/home"><img src="images/logoupi.png" alt="Logo" class="logo"></a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/mqtt">Monitor</a></li>
+                </ul>
+            </div>
+            <div class="user-logo">
+                <img src="images/user.png" alt="User Logo" class="userlogo"></a>
+                <div class="dropdown">
+                    <a href="/profil">Profil</a>
+                    <a href="/" onclick="confirmSignOut(event)">Sign Out</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <h1>Profil Anda</h1>
+        <div class="login-container">
+            <img src="images/user.png" alt="Logo" class="login-logo">
+            <div class="text-container">
+                <h2>Username: </h2>
+                <h2>E-mail: </h2>
+                <h2>Nama: </h2>
+                <h2>Jabatan: </h2>
+            </div>
+        </div>
+        <!-- Konten lainnya -->
+    </main>
+</body>
+</html>

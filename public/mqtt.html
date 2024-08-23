@@ -3,138 +3,333 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MQTT</title>
+  <title>Monitor</title>
   <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: top; 
-      height: 100vh;
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #DDE6ED;
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(to bottom,
+        #1c3b58,  /* biru gelap */
+            #234e72,  /* biru sedang */
+            #2b628d,  /* biru agak terang */
+            #3b729e,  /* biru lebih terang */
+            #4d82af
+        ); 
+        color: white;
+        overflow-x: hidden; /* Menyembunyikan scrollbar horizontal */
+        box-sizing: border-box;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #1c3b58;
+  color: white;
+  padding: 15px 35px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1em;
+}
+
+header nav {
+        display: flex;
+        align-items: center;
+        width: 100%;
     }
 
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background-color: rgb(22, 22, 66);
-      color: white;
-      padding: 10px 20px;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+header nav ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+header nav ul li {
+  margin: 0 15px;
+  display: flex;
+  align-items: center;
+}
+
+header nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.logo {
+        height: 35px;
+        transition: transform 0.3s ease, shadow 0.3s ease;
     }
 
-    header nav ul {
-      list-style: none;
-      display: flex;
-      margin: 0;
-      padding: 0;
+    .logo:hover {
+        transform: scale(1.1); /* Sedikit memperbesar saat hover */
+        border-radius: 50%; /* Membuat efek bulat */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Efek bayangan lebih dalam saat hover */
     }
 
-    header nav ul li {
-      margin: 0 15px;
+    .userlogo {
+        height: 35px;
+        transition: transform 0.3s ease, shadow 0.3s ease;
     }
 
-    header nav ul li a {
-      color: white;
-      text-decoration: none;
+    .userlogo:hover {
+        transform: scale(1.1); /* Sedikit memperbesar saat hover */
+        border-radius: 50%; /* Membuat efek bulat */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Efek bayangan lebih dalam saat hover */
     }
 
-    main {
-      padding-top: 65px; /* Sesuaikan dengan tinggi header Anda */
+    .user-logo {
+  margin-left: auto; /* Memindahkan userlogo ke kanan */
+  order: 2; /* Menempatkan userlogo sebagai item terakhir */
+  padding-right: 20px;
+  margin-right: 20px;
+  position: relative; /* Membutuhkan posisi relatif untuk dropdown */
+}
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 15px; /* Jarak antara elemen */
     }
 
-    #on_button, #off_button {
-      font-size: 20px; /* Ukuran teks */
-      padding: 15px 30px; /* Padding atas-bawah dan kiri-kanan */
-      width: 200px; /* Lebar tombol */
-      height: 50px; /* Tinggi tombol */
-      justify-content: center;
+    .dropdown {
+        display: none; /* Sembunyikan dropdown secara default */
+        position: absolute; /* Posisi absolut untuk dropdown */
+        top: 100%; /* Posisi dropdown di bawah userlogo */
+        right: 0px; /* Posisi dropdown di ujung kanan userlogo */
+        background-color: #234e72;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 150px;
+        z-index: 1000;
     }
 
-    .indicator-container {
-      position: relative;
-      width: 100px;
-      height: 250px;
-      margin-top: 20px;
+    .dropdown a {
+        display: block;
+        padding: 10px;
+        color: white;
+        text-decoration: none;
+        text-align: center;
     }
 
-    .thermometer, .waterdrop {
-      background-image: url('/images/thermometer-image.png');
-      background-size: cover;
-      height: 100%;
+    .dropdown a:hover {
+        background-color: #1c3b58;
     }
 
-    .thermometer {
-      background-image: url('/images/thermometer-image.png');
+    .user-logo:hover .dropdown {
+        display: block; /* Tampilkan dropdown saat hover */
     }
 
-    .waterdrop {
-      background-image: url('/images/water-drop-image.png');
-    }
-    .indicator {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      background-color: red;
-    }
+main {
+  margin-top: 100px;  
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px; /* Jarak antar box */
+  justify-content: center; /* Mengatur agar box-box di-center */
+  width: 100%;
+  max-width: 1200px;
+  box-sizing: border-box;
+}
 
-    #thermometer-indicator {
-      background-color: red;
-    }
+.container-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-    #waterdrop-indicator {
-      background-color: blue;
-    }
+.text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: top; /* Menyusun item di tengah secara vertikal */
+  text-align: top;
+}
 
-    .sensor-data {
-      margin-top: 20px;
-    }
-  </style>
+.gps-container, .speed-container, .wp-container, .temp-container, .humid-container, .led-container, .potentiometer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 100%; /* Pastikan konten tidak melampaui lebar elemen */
+  box-sizing: border-box;
+}
+
+.gps-container:hover, .speed-container:hover, .wp-container:hover, .temp-container:hover, .humid-container:hover, .led-container:hover, .potentiometer-container:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.gps-container h2, .speed-container h2, .wp-container h2, .temp-container h2, .humid-container h2, .led-container h2, .potentiometer-container h2 {
+  font-size: 1.2em;
+  margin: 0;
+  transition: color 0.3s ease, transform 0.3s ease;
+  text-align: center;
+}
+
+.gps-container h2:hover, .speed-container h2:hover, .wp-container h2:hover, .temp-container h2:hover, .humid-container h2:hover, .led-container h2:hover, .potentiometer-container h2:hover {
+  transform: scale(1.1);
+}
+
+h1 {
+  font-size: 3em;
+  margin: 0px;
+  justify-content: center;
+  align-items: center;
+}
+
+#on_button, #off_button {
+  font-size: 20px; /* Ukuran teks */
+  padding: 15px 30px; /* Padding atas-bawah dan kiri-kanan */
+  width: 200px; /* Lebar tombol */
+  height: 50px; /* Tinggi tombol */
+}
+
+.indicator {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  text-align: center;
+  align-items: center;
+}
+
+.sensor-data {
+  margin-top: 0px;
+  text-align: center;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  .container-wrapper {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+
+  .gps-container h2, .speed-container h2, .wp-container h2, .temp-container h2, .humid-container h2, .led-container h2, .potentiometer-container h2 {
+    font-size: 1em;
+  }
+}
+
+
+      </style>
+                  <script>
+                    function confirmSignOut(event) {
+                        event.preventDefault(); // Mencegah tautan untuk diikuti secara langsung
+                        var confirmation = confirm("Apakah anda yakin ingin keluar?");
+                        if (confirmation) {
+                            window.location.href = "/"; // Arahkan ke halaman /
+                        }
+                    }
+                </script>
 </head>
 <body>
   <header>
     <nav>
-      <ul>
-        <li><a href="/about">About</a></li>
-        <li><a href="/">Home</a></li>
-        <li><a href="/kalkulator">Kalkulator</a></li>
-        <li><a href="/auth">Login/Signup</a></li>
-        <li><a href="/mqtt">MQTT</a></li>
-      </ul>
+      <div class="nav-links">
+          <ul>
+              <li><a href="/home"><img src="images/logoupi.png" alt="Logo" class="logo"></a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/mqtt">Monitor</a></li>
+          </ul>
+        </div>
+        <div class="user-logo">
+            <img src="images/user.png" alt="User Logo" class="userlogo"></a>
+            <div class="dropdown">
+              <a href="/profil">Profil</a>
+              <a href="/" onclick="confirmSignOut(event)">Sign Out</a>
+          </div>
+        </div>
     </nav>
   </header>
   <main>
-    <h1>MQTT Publish Interface JavaScript</h1>
-    <h2>LED Interface</h2>
+    <h1>Monitor & MQTT</h1>
+    <div class="container-wrapper">
+      <div class="led-container">
+        <div class="text-container">
+          <h2 class="led-title">LED</h2>
     <button id="on_button">On</button>
     <button id="off_button">Off</button>
-    <h2>Latest Sensor Data</h2>
+</div>
+</div>
+  <div class="potentiometer-container">
+    <div class="text-container">
+      <h2 class="potentiometer-title">POTENTIOMETER</h2>
     <div id="sensorData">No data received</div>
     <meter id="disk_c" value="0" min="0" max="4096">2 out of 10</meter><br>
-    <h2>DHT Interface</h2>
     <div class="sensor-data">
-      <div class="indicator-container">
-        <div class="thermometer">
           <div id="thermometer-indicator" class="indicator"></div>
-        </div>
       </div>
-      <div class="indicator-container">
-        <div class="waterdrop">
           <div id="waterdrop-indicator" class="indicator"></div>
         </div>
       </div>
-      <div id="temperature-display"></div>
-      <div id="humidity-display"></div>
+      </div>
+      <div class="container-wrapper">
+          <div class="temp-container">
+          <div class="text-container">
+            <h2 class="temp-title">TEMPERATURE</h2>
+            <div class="sensor-data">
+              <h3 id="temperature-display"></h3>
+            </div>
+          </div>
+        </div>
+        <div class="humid-container">
+          <div class="text-container">
+            <h2 class="humid-title">HUMIDITY</h2>
+            <div class="sensor-data">
+              <h3 id="humidity-display"></h3>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="container-wrapper">
+      <div class="gps-container">
+        <div class="text-container">
+          <h2 class="gps-title">GPS</h2>
+          <div class="coordinates">
+            <h3>Latitude: </h3>
+            <h3>Longitude: </h3>
+          </div>
+        </div>
+      </div>
+      <div class="speed-container">
+        <div class="text-container">
+          <h2 class="speed-title">SPEED</h2>
+          <div class="sensor-data">
+            <h3>Speed: </h3>
+          </div>
+        </div>
+      </div>
+      <div class="wp-container">
+        <div class="text-container">
+          <h2 class="wp-title">WATER PRESSURE</h2>
+          <div class="sensor-data">
+            <h3>Pressure: </h3>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
+
   <script>
     document.getElementById('on_button').addEventListener('click', () => {
-      const topic = 'button_husni';
+      const topic = 'button_yossi';
       const message = 'on';
 
       fetch('/publish', {
@@ -154,7 +349,7 @@
     });
 
     document.getElementById('off_button').addEventListener('click', () => {
-      const topic = 'button_husni';
+      const topic = 'button_yossi';
       const message = 'off';
 
       fetch('/publish', {
@@ -190,8 +385,11 @@
         .then(data => {
             updateThermometer(data.temperature);
             updateWaterdrop(data.humidity);
-            document.getElementById('temperature-display').innerText = "Temperature: " + data.temperature + "°C";
-            document.getElementById('humidity-display').innerText = "Humidity: " + data.humidity + "%";
+            const temperatureElement = document.getElementById('temperature-display');
+        if (temperatureElement) {
+          temperatureElement.innerText = data.temperature + "°C";
+        }
+            document.getElementById('humidity-display').innerText = data.humidity + "%";
         })
         .catch(error => {
           console.error('Error:', error);
@@ -200,30 +398,21 @@
 
     function updateThermometer(temperature) {
       const indicator = document.getElementById('thermometer-indicator');
-      const height = (temperature / 50) * 100; // Assume max temperature is 50°C
+      const height = (temperature / 100) * 100; // Assume max temperature is 100°C
       indicator.style.height = `${height}%`;
-
-      if (temperature >= 30) {
-        indicator.style.backgroundColor = 'red';
-      } else if (temperature <= 10) {
-        indicator.style.backgroundColor = 'blue';
-      } else {
-        indicator.style.backgroundColor = 'orange';
-      }
     }
 
     function updateWaterdrop(humidity) {
       const indicator = document.getElementById('waterdrop-indicator');
       const height = (humidity / 100) * 100; // Max humidity is 100%
       indicator.style.height = `${height}%`;
-      indicator.style.backgroundColor = 'blue';
     }
 
     var meterElement = document.getElementById('disk_c');
 
     // Fetch sensor data every 1 second
     setInterval(fetchSensorData, 1000);
-    setInterval(fetchDHTData, 1000);
+    setInterval(fetchDHTData, 500);
 
     // Fetch sensor data initially
     fetchSensorData();

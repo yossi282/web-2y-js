@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Signup</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(to bottom, #1c3b58, #234e72, #2b628d, #3b729e, #4d82af);
+            color: white;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #1c3b58;
+            color: white;
+            padding: 15px 35px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1em;
+        }
+
+        header nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+header nav ul li {
+  margin: 0 15px;
+  display: flex;
+  align-items: center;
+}
+
+header nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.logo {
+            height: 35px; /* Ukuran logo diperbesar */
+            transition: transform 0.3s ease, shadow 0.3s ease;
+        }
+
+        .signup-logo {
+            height: 50px; /* Ukuran logo diperbesar */
+            transition: transform 0.3s ease, shadow 0.3s ease;
+            margin-bottom: -10px;
+          }
+
+          .logo:hover {
+            transform: scale(1.1);
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .signup-logo:hover {
+            transform: scale(1.1);
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .signup-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .signup-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .signup-container h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .signup-container h2:hover {
+            transform: scale(1.1); /* Efek zoom saat hover */
+        }
+
+        .input-box {
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .input-box input {
+            width: 100%; /* Ubah width menjadi 100% agar semua elemen input menyesuaikan lebar container */
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .input-box input::placeholder {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        .input-box input:focus::placeholder {
+            color: transparent;
+        }
+
+        .signup-button {
+            width: 100%; /* Ubah width menjadi 100% untuk menyamai ukuran input box */
+            padding: 10px 0; /* Samakan padding dengan input box */
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1em;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .signup-button:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+            transform: scale(1.05); /* Efek zoom saat hover */
+        }
+
+        .signup-button:focus {
+            outline: none;
+        }
+
+        .signup-box img.logo {
+            margin-bottom: 20px; /* Jarak antara logo dan box login/signup */
+        }
+
+        @media (max-width: 600px) {
+            .signup-container {
+                padding: 20px;
+                width: 90%;
+            }
+
+            .signup-container h2 {
+                font-size: 2em;
+            }
+
+            .input-box input {
+                padding: 8px 12px;
+                font-size: 0.9em;
+            }
+
+            .signup-button {
+                padding: 8px 0;
+                font-size: 0.9em;
+            }
+        }
+  </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/"><img src="images/logoupi.png" alt="UPI Logo" class="logo"></a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/mqtt">Monitor</a></li>
+            </ul>
+        </nav>
+    </header>
+        <main>
+            <div class="signup-container">
+                <img src="images/user.png" alt="Logo" class="signup-logo">
+                <h2>SIGN UP</h2>
+                <form id="signupForm">
+                    <div class="input-box">
+                        <input type="email" id="signup-email" placeholder="E-mail" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" id="signup-password" placeholder="Password" required>
+                    </div>
+                    <div class="input-box">
+                        <button type="submit" class="signup-button">Verifikasi Akun</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const signupForm = document.getElementById('signupForm');
+          
+            signupForm.addEventListener('submit', function(event) {
+              event.preventDefault();
+              const email = document.getElementById('signup-email').value;
+              const password = document.getElementById('signup-password').value;
+          
+              console.log('Attempting to signup with:', email, password); // Log signup attempt
+          
+              fetch('/api/signup', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+              })
+              .then(response => response.json())
+              .then(data => {
+                console.log('Signup response:', data); // Log response data
+                alert(data.message);
+              })
+              .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+</body>
+</html>

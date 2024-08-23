@@ -11,20 +11,29 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #DDE6ED;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(to bottom,
+            #1c3b58,  /* biru gelap */
+                #234e72,  /* biru sedang */
+                #2b628d,  /* biru agak terang */
+                #3b729e,  /* biru lebih terang */
+                #4d82af    /* biru pastel sangat terang */
+            ); 
+            color: white;
         }
+
 header {
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: rgb(22, 22, 66);
+    background-color: #1c3b58;
     color: white;
-    padding: 10px 20px;
+    padding: 15px 35px;
     z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-size: 1em;
 }
 
 header nav ul {
@@ -36,11 +45,17 @@ header nav ul {
 
 header nav ul li {
     margin: 0 15px;
+    display: flex;
+    align-items: center;
 }
 
 header nav ul li a {
     color: white;
     text-decoration: none;
+}
+
+.logo {
+    height: 35px;
 }
 
 main {
@@ -87,18 +102,31 @@ main {
             font-size: 18px;
             font-weight: bold;
         }
+
+        h1 {
+    font-size: 3em;
+    margin: 0;
+}
+
     </style>
 </head>
 <body>
     <header>
         <nav>
             <ul>
+                <li><a href="/"><img src="images/logoupi.png" alt="Logo" class="logo"></a></li>
                 <li><a href="/about">About</a></li>
-                <li><a href="/">Home</a></li>
                 <li><a href="/kalkulator">Kalkulator</a></li>
-                <li><a href="/auth">Login/Signup</a></li>
                 <li><a href="/mqtt">MQTT</a></li>
             </ul>
+            <div class="user-logo">
+                <a href="/auth"><img src="images/user.png" alt="User Logo" class="userlogo"></a>
+                <div class="dropdown">
+                    <a href="/profile">Profile</a>
+                    <a href="/login.html">Login</a>
+                    <a href="/signup.html">Sign Up</a>
+                    <a href="/">Sign Out</a>
+                </div>
         </nav>
     </header>
     <main>
